@@ -1,6 +1,8 @@
 # UTS Praktikum Pemrograman Berbasis Website  
 
-Mini-proyek ini adalah aplikasi Laravel sederhana yang memuat sistem login manual, dashboard, profil pengguna, dan halaman pengelolaan data user.
+Projek Laravel sederhana yang memuat sistem login manual, dashboard, profil pengguna, dan halaman pengelolaan data user.
+
+Link: https://uts-pweb232410103047.up.railway.app/login
 ---
 
 ## Fitur Utama
