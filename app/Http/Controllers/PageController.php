@@ -47,9 +47,6 @@ class PageController extends Controller
         }
 
         $user = Crypt::decryptString(session()->get('auth'));
-        if (!array_key_exists($user, $this->users)) {
-            return redirect()->route('login')->with('message', 'Silahkan login dulu mas');
-        }
 
         if (request('username')) {
             return view('dashboard');
@@ -61,12 +58,8 @@ class PageController extends Controller
     public function login(Request $request)
     {
         if (session()->has('auth')) {
-            $user = Crypt::decryptString(Session()->get('user'));
-            if (array_key_exists($user, $this->users)) {
-                return redirect()->route('dashboard', ['username' => $user])->with('message', 'Sudah login king ' . $user);
-            } else {
-                return redirect()->route('login')->with('message', 'Silahkan login dulu mas');
-            }
+            $user = Crypt::decryptString(session()->get('auth'));
+            return redirect()->route('dashboard', ['username' => $user])->with('message', 'Sudah login king ' . $user);
         }
 
         if ($request->isMethod('post')) {
@@ -75,16 +68,9 @@ class PageController extends Controller
                 'password' => 'required|string',
             ]);
 
-            if (!array_key_exists($loginData['username'], $this->users)) {
-                return back()->withErrors(['username' => 'Username tidak ada king OwO'])->withInput();
-            }
+            $user = strtolower($loginData['username']);
 
-            $user = $this->users[$loginData['username']];
-            if ($user['password'] !== $loginData['password']) {
-                return back()->withErrors(['password' => 'Password salah king >///<'])->withInput();
-            }
-
-            session()->put('auth', Crypt::encryptString($loginData['username']));
+            session()->put('auth', Crypt::encryptString($user));
 
             return redirect()->intended(route('dashboard'));
         }
@@ -96,15 +82,6 @@ class PageController extends Controller
     {
         if (!session()->has('auth')) {
             return redirect()->route('login')->with('message', 'Silahkan login dulu mas');
-        }
-
-        $user = Crypt::decryptString(session()->get('auth'));
-        if (!array_key_exists($user, $this->users)) {
-            return redirect()->route('login')->with('message', 'Silahkan login dulu mas');
-        } else {
-            if ($this->users[$user]['role'] !== 'Admin') {
-                return redirect()->route('dashboard')->with('message', 'Hanya admin yang bisa mengakses halaman ini');
-            }
         }
         $users = $this->users;
         return view('pengelolaan', compact('users'));
@@ -118,11 +95,13 @@ class PageController extends Controller
         }
 
         $user = Crypt::decryptString(session()->get('auth'));
-        if (!array_key_exists($user, $this->users)) {
-            return redirect()->route('login')->with('message', 'Silahkan login dulu mas');
-        } else {
-            $user = $this->users[$user];
-        }
+        $user = [
+            'username' => $user,
+            'name' => 'King ' . $user,
+            'role' => $user == 'admin' ? 'admin' : 'User',
+            'email' => $user . '@mail.com',
+            'password' => '',
+        ];
         return view('profile', compact('user'));
     }
 

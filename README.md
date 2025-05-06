@@ -1,66 +1,202 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# UTS Praktikum Pemrograman Berbasis Website  
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Mini-proyek ini adalah aplikasi Laravel sederhana yang memuat sistem login manual, dashboard, profil pengguna, dan halaman pengelolaan data user.
+---
 
-## About Laravel
+## Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Login Manual** menggunakan username & password.
+- **Dashboard**: Menyambut user setelah login.
+- **Profile**: Menampilkan info user yang sedang login.
+- **Pengelolaan**: Menampilkan daftar user dari controller dalam bentuk tabel.
+- **Blade Component**: Navbar & Footer reusable.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Struktur Folder
 
-## Learning Laravel
+```
+/routes
+└── web.php
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+/app/Http/Controllers
+└── PageController.php
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+/resources/views
+├── layouts/
+│   └── app.blade.php
+├── components/
+│   ├── navbar.blade.php
+│   └── footer.blade.php
+├── login.blade.php
+├── dashboard.blade.php
+├── profile.blade.php
+└── pengelolaan.blade.php
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Routing (routes/web.php)
 
-### Premium Partners
+```php
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PageController;
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+Route::get('/', [PageController::class,'index'])->name('dashboard');
 
-## Contributing
+Route::get('/login', [PageController::class, 'login'])->name('login');
+Route::post('/login', [PageController::class, 'login'])->name('login');
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Route::get('/pengelolaan', [PageController::class, 'pengelolaan'])->name('pengelolaan');
 
-## Code of Conduct
+Route::get('/profile', [PageController::class, 'profile'])->name('profile');
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Route::get('/logout', [PageController::class, 'logout'])->name('logout');
+````
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Controller: PageController.php
 
-## License
+* Semua halaman diproses melalui controller `PageController`.
+* Login dilakukan dengan mencocokkan input dari user terhadap array user statis.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Contoh struktur array user:
+
+```php
+protected $users = [
+    'admin' => [
+        'username' => 'admin',
+        'name' => 'Administrator',
+        'role' => 'Admin',
+        'email' => 'admin@mail.com',
+        'password' => 'admin123',
+    ],
+    'adi' => [
+        'username' => 'adi',
+        'name' => 'King Adi',
+        'role' => 'User',
+        'email' => 'adi@mail.com',
+        'password' => 'adi123',
+    ],
+    ...
+];
+```
+
+---
+
+## Halaman View
+
+### 1. `login.blade.php`
+
+Form login dengan input `username` dan `password`.
+
+```blade
+<form method="POST" action="{{ route('login') }}">
+  @csrf
+  <input type="text" name="username" placeholder="Username" required>
+  <input type="password" name="password" placeholder="Password" required>
+  <button type="submit">Login</button>
+</form>
+```
+
+### 2. `dashboard.blade.php`
+
+Menampilkan:
+
+```blade
+Selamat Datang King {{ request('username') }}
+```
+
+### 3. `profile.blade.php`
+
+Tampilkan detail lengkap user:
+
+```blade
+Nama: {{ $user['username'] }}
+Email: {{ $user['email'] }}
+Role: {{ $user['role'] }}
+```
+
+### 4. `pengelolaan.blade.php`
+
+Loop dan tampilkan user dalam tabel:
+
+```blade
+@foreach($users as $user)
+<tr>
+  <td>{{ $user['username'] }}</td>
+  <td>{{ $user['email'] }}</td>
+  <td>{{ $user['role'] }}</td>
+</tr>
+@endforeach
+```
+
+---
+## Halaman Layouts dan Components
+
+### 1. `app.blade.php`
+
+```blade
+<body class="relative bg-black font-sans text-white">
+
+   @if (!request()->is('login'))
+      <x-navbar></x-navbar>
+   @endif
+
+   <div class="relative z-10">
+      @yield('content')
+   </div>
+   @if (!request()->is('login'))
+      <x-footer></x-footer>
+   @endif
+</body>
+```
+
+### 2. `navbar.blade.php`
+
+### 3. `footer.blade.php`
+
+
+## Menjalankan Proyek
+
+1. Clone repositori:
+
+   ```bash
+   git clone https://github.com/MasFana/UTS_PWEB_232410103047
+   cd UTS_PWEB_232410103047
+   ```
+
+2. Install dependency:
+
+   ```bash
+   composer install
+   ```
+
+3. Copy file `.env` dan generate key:
+
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+4. Jalankan server lokal:
+
+   ```bash
+   php artisan serve
+   ```
+
+5. Akses di browser:
+
+   ```
+   http://localhost:8000
+   ```
+
+---
+
+## Catatan 
+
+* Sistem login ini **tidak menggunakan autentikasi Laravel bawaan (Auth)**, hanya cocok untuk demo atau latihan.
+* Tidak ada database yang digunakan, semua data user disimpan sebagai array di controller.
+* Untuk logout cukup arahkan ke route `/logout` yang akan mengarahkan kembali ke halaman login.
