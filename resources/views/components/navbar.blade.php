@@ -8,7 +8,7 @@
 
         {{-- menu pas desktop --}}
         <div class="hidden items-center space-x-6 md:flex">
-            <a class="{{ request()->is('dashboard') ? 'text-white font-medium' : 'text-gray-300' }} transition-colors duration-200 hover:text-white"
+            <a class="{{ request()->is('dashboard' || request()->is('/')) ? 'text-white font-medium' : 'text-gray-300' }} transition-colors duration-200 hover:text-white"
                 href="{{ route('dashboard') }}">
                 Dashboard
             </a>
@@ -44,7 +44,7 @@
     {{-- dropdown kalau lagi di mobile --}}
     <div class="hidden bg-black/50 backdrop-blur-sm md:hidden" id="mobile-menu">
         <div class="space-y-2 px-4 pb-3 pt-2">
-            <a class="{{ request()->is('dashboard') ? 'text-white font-medium' : 'text-gray-300' }} block px-3 py-2 transition-colors duration-200 hover:text-white"
+            <a class="{{ request()->is('dashboard' || request()->is('/')) ? 'text-white font-medium' : 'text-gray-300' }} block px-3 py-2 transition-colors duration-200 hover:text-white"
                 href="{{ route('dashboard') }}">
                 Dashboard
             </a>
