@@ -14,7 +14,7 @@
             <div class="flex flex-col items-center space-y-4 sm:flex-row sm:space-x-6 sm:space-y-0">
                 <!-- Profile Image -->
                 <img class="h-24 w-24 rounded-lg object-fit shadow-md sm:h-28 sm:w-28" 
-                     src="image.png" 
+                     src="https://raw.githubusercontent.com/imamamacuuu/FanaImage/main/uploads/image.png" 
                      alt="Profile Picture">
 
                 {{-- detail info --}}
