@@ -7,6 +7,9 @@
 
         <title>MasFana Simple Login</title>
 
+        <meta name="description" content="Simple Login with Laravel and Tailwind CSS">
+        <link rel="shortcut icon" href="https://raw.githubusercontent.com/imamamacuuu/FanaImage/main/uploads/image.ico" type="image/x-icon">
+
         <!-- Fonts -->
         <link href="https://fonts.bunny.net" rel="preconnect">
         <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
