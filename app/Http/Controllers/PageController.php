@@ -72,7 +72,7 @@ class PageController extends Controller
 
             session()->put('auth', Crypt::encryptString($user));
 
-            return redirect()->intended(route('dashboard'));
+            return redirect()->intended(route('dashboard', ['username'=> $user]));
         }
 
         return view('login');
